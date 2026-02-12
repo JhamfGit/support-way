@@ -1,0 +1,47 @@
+.technician-view {
+    min-height: calc(100vh - 200px);
+}
+
+.welcome-section {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.welcome-card {
+    background: var(--gradient-primary);
+    color: white;
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-xl);
+}
+
+.welcome-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.welcome-card h2 {
+    margin-bottom: var(--spacing-sm);
+    font-size: 2rem;
+}
+
+.welcome-card p {
+    margin: 0;
+    font-size: 1.125rem;
+    opacity: 0.95;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}

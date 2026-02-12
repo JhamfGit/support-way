@@ -1,0 +1,14 @@
+.support-form-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.support-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.support-form .card-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
