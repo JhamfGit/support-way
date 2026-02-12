@@ -6,12 +6,11 @@ import './App.css';
 function App() {
   const [currentView, setCurrentView] = useState('technician');
   const [supports, setSupports] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const [theme, setTheme] = useState(() => {
-    // Obtener tema guardado o usar 'light' por defecto
     return localStorage.getItem('support-way-theme') || 'light';
   });
 
-  // Aplicar tema al documento
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('support-way-theme', theme);
@@ -21,8 +20,39 @@ function App() {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
-  const addSupport = (support) => {
-    setSupports([...supports, { ...support, id: Date.now() }]);
+  useEffect(() => {
+    fetchSupports();
+  }, []);
+
+  const fetchSupports = async () => {
+    try {
+      const response = await fetch(`${API_URL}/supports`);
+      const data = await response.json();
+      setSupports(data);
+    } catch (error) {
+      console.error('Error fetching supports:', error);
+    }
+  };
+
+  const addSupport = async (support) => {
+    try {
+      const response = await fetch(`${API_URL}/supports`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          technician_name: support.technician,
+          client_name: support.client,
+          support_type: support.supportType,
+          scheduled_time: support.scheduledTime,
+          assigned_at: new Date().toISOString()
+        })
+      });
+      if (response.ok) {
+        fetchSupports();
+      }
+    } catch (error) {
+      console.error('Error adding support:', error);
+    }
   };
 
   return (

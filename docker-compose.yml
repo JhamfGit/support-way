@@ -1,0 +1,53 @@
+version: "3.7"
+
+services:
+  support-way-frontend:
+    image: ghcr.io/jhamfgit/support-way-frontend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=https://support-way-api.jhamf.com
+    networks:
+      - jhamfstack
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.support-way-client.rule=Host(`support-way.jhamf.com`)"
+        - "traefik.http.routers.support-way-client.entrypoints=websecure"
+        - "traefik.http.routers.support-way-client.tls.certresolver=myresolver"
+        - "traefik.http.services.support-way-client.loadbalancer.server.port=80"
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 128M
+
+  support-way-backend:
+    image: ghcr.io/jhamfgit/support-way-backend:latest
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=89c64e8a187ef7949d59278de5311b70
+      - DB_NAME=support_way_db
+      - PORT=5000
+    networks:
+      - jhamfstack
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.support-way-api.rule=Host(`support-way-api.jhamf.com`)"
+        - "traefik.http.routers.support-way-api.entrypoints=websecure"
+        - "traefik.http.routers.support-way-api.tls.certresolver=myresolver"
+        - "traefik.http.services.support-way-api.loadbalancer.server.port=5000"
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+networks:
+  jhamfstack:
+    external: true
+    name: jhamfstack
