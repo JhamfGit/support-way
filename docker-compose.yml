@@ -13,7 +13,7 @@ services:
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.support-way-client.rule=Host(`support-way.jhamf.com`)"
+        - "traefik.http.routers.support-way-client.rule=Host(`supportway.jhamf.com`)"
         - "traefik.http.routers.support-way-client.entrypoints=websecure"
         - "traefik.http.routers.support-way-client.tls.certresolver=myresolver"
         - "traefik.http.services.support-way-client.loadbalancer.server.port=80"
